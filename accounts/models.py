@@ -41,13 +41,25 @@ class Purchase(models.Model):
         template = '{0.course} | {0.customer}'
         return template.format(self)
     
-class Tutorial(models.Model):
-    CATEGORY = (
-        ('Photoshop', 'Photoshop'),
-        ('Illustrator', 'Illustrator')
-    )
+class TutorialPhotoshop(models.Model):
     name = models.CharField(max_length=500, null=True)
-    category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+    content1 = models.TextField(blank=True)
+    content2 = models.TextField(blank=True)
+    content3 = models.TextField(blank=True)
+    content4 = models.TextField(blank=True)
+    content5 = models.TextField(blank=True)
+    image1 = models.ImageField(upload_to='./static/tutorial', blank=True)
+    image2 = models.ImageField(upload_to='./static/tutorial', blank=True)
+    image3 = models.ImageField(upload_to='./static/tutorial', blank=True)
+    image4 = models.ImageField(upload_to='./static/tutorial', blank=True)
+    image5 = models.ImageField(upload_to='./static/tutorial', blank=True)
+
+    def __str__(self):
+        template = '{0.name} | {0.category}'
+        return template.format(self)
+
+class TutorialIllustrator(models.Model):
+    name = models.CharField(max_length=500, null=True)
     content1 = models.TextField(blank=True)
     content2 = models.TextField(blank=True)
     content3 = models.TextField(blank=True)
