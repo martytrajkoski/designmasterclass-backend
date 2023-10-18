@@ -55,7 +55,7 @@ class TutorialPhotoshop(models.Model):
     image5 = models.ImageField(upload_to='./static/tutorial', blank=True)
 
     def __str__(self):
-        template = '{0.name} | {0.category}'
+        template = '{0.name}'
         return template.format(self)
 
 class TutorialIllustrator(models.Model):
@@ -72,5 +72,5 @@ class TutorialIllustrator(models.Model):
     image5 = models.ImageField(upload_to='./static/tutorial', blank=True)
 
     def __str__(self):
-        template = '{0.name} | {0.category}'
+        template = '{0.name}'
         return template.format(self)
