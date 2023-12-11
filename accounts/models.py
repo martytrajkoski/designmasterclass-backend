@@ -49,10 +49,10 @@ class TutorialPhotoshop(models.Model):
     content4 = models.TextField(blank=True)
     content5 = models.TextField(blank=True)
     image1 = models.ImageField(upload_to='./static/tutorial/', blank=True)
-    image2 = models.ImageField(upload_to='./static/tutorial', blank=True)
-    image3 = models.ImageField(upload_to='./static/tutorial', blank=True)
-    image4 = models.ImageField(upload_to='./static/tutorial', blank=True)
-    image5 = models.ImageField(upload_to='./static/tutorial', blank=True)
+    image2 = models.ImageField(upload_to='./static/tutorial/', blank=True)
+    image3 = models.ImageField(upload_to='./static/tutorial/', blank=True)
+    image4 = models.ImageField(upload_to='./static/tutorial/', blank=True)
+    image5 = models.ImageField(upload_to='./static/tutorial/', blank=True)
 
     def __str__(self):
         template = '{0.name}'
@@ -65,11 +65,11 @@ class TutorialIllustrator(models.Model):
     content3 = models.TextField(blank=True)
     content4 = models.TextField(blank=True)
     content5 = models.TextField(blank=True)
-    image1 = models.ImageField(upload_to='./static/tutorialIllustrator', blank=True)
-    image2 = models.ImageField(upload_to='./static/tutorialIllustrator', blank=True)
-    image3 = models.ImageField(upload_to='./static/tutorialIllustrator', blank=True)
-    image4 = models.ImageField(upload_to='./static/tutorialIllustrator', blank=True)
-    image5 = models.ImageField(upload_to='./static/tutorialIllustrator', blank=True)
+    image1 = models.ImageField(upload_to='./static/tutorialIllustrator/', blank=True)
+    image2 = models.ImageField(upload_to='./static/tutorialIllustrator/', blank=True)
+    image3 = models.ImageField(upload_to='./static/tutorialIllustrator/', blank=True)
+    image4 = models.ImageField(upload_to='./static/tutorialIllustrator/', blank=True)
+    image5 = models.ImageField(upload_to='./static/tutorialIllustrator/', blank=True)
 
     def __str__(self):
         template = '{0.name}'
