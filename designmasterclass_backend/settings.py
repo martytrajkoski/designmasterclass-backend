@@ -124,9 +124,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-MEDIA_URL = '/'
+MEDIA_URL = '/designmasterclass_backend/'
 
-MEDIA_ROOT = BASE_DIR/'media'
+MEDIA_ROOT = BASE_DIR/'designmasterclass_backend'
 
 
 # Default primary key field type
