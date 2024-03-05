@@ -25,7 +25,7 @@ from designmasterclass_backend import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
-    path('api/', include('designmasterclass_backend.api.urls'))
+    path('api/', include('accounts.api.urls'))
 ] 
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
