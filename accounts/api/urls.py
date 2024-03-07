@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import TutorialPhotoshopViewSet, TutorialIllustratorViewSet, CourseViewSet, UserLoginViewSet, UserLogoutViewSet, UserRegisterViewSet, UserViewViewSet
+from .views import TutorialPhotoshopViewSet, TutorialIllustratorViewSet, CourseViewSet, QuizViewSet, UserLoginViewSet, UserLogoutViewSet, UserRegisterViewSet, UserViewViewSet
 from django.urls import path, include
 
 # urlpatterns = [
@@ -11,19 +11,14 @@ from django.urls import path, include
 router = DefaultRouter()
 router.register(r'tutorialphotoshop', TutorialPhotoshopViewSet)
 router.register(r'tutorialillustrator', TutorialIllustratorViewSet)
-router.register(r'course', CourseViewSet)
-
-# tutorialillustrator_router = DefaultRouter()
-# tutorialillustrator_router.register(r'tutorialphotoshop', TutorialPhotoshopViewSet)
-# tutorialphotoshop_router = DefaultRouter()
-# tutorialphotoshop_router.register(r'tutorialillustrator', TutorialIllustratorViewSet)
-# course_router = DefaultRouter()
-# course_router.register(r'course', CourseViewSet)
 
 router.register(r'userlogin', UserLoginViewSet, basename='userlogin')
 router.register(r'userlogout', UserLogoutViewSet, basename='userlogout')
 router.register(r'userregister', UserRegisterViewSet, basename='userregister')
 router.register(r'userview', UserViewViewSet, basename='userview')
+
+router.register(r'quizzes', QuizViewSet, basename='quiz')
+router.register(r'courses', CourseViewSet, basename='course')
 
 urlpatterns = [
     path('', include(router.urls)),

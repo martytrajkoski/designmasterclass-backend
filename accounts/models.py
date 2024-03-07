@@ -49,6 +49,27 @@ class CustomUser(AbstractBaseUser):
     
     def has_perm(self, perm, obj=None):
         return True
+    
+class Quiz(models.Model):
+    CATEGORY = (
+        ('Photoshop', 'Photoshop'),
+        ('Illustrator', 'Illustrator')
+    )
+    name = models.CharField(max_length=200, null=True)
+    artist = models.CharField(max_length=50, null=True)
+    length = models.DurationField(null=True)
+    category = models.CharField(max_length=200, null=True, choices=CATEGORY)
+    url = models.URLField(max_length=200, null=True)
+    thumbnail = models.ImageField(upload_to='./static/quiz', null=True)
+    dateCreated = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        template = '{0.name}'
+        return template.format(self)
+
+    @property
+    def link(self):
+        return f"/{self.url_slug}/"
 
 class Course(models.Model):
     CATEGORY = (
@@ -56,17 +77,30 @@ class Course(models.Model):
         ('Illustrator', 'Illustrator')
     )
     name = models.CharField(max_length=200, null=True)
+    artist = models.CharField(max_length=50, null=True)
     price = models.FloatField(null=True)
     category = models.CharField(max_length=200, null=True, choices=CATEGORY)
-    description = models.CharField(max_length=500, null=True)
+    # description = models.CharField(max_length=500, null=True)
     length = models.DurationField(null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
-    link = models.CharField(max_length=500, null=True)
+    url = models.URLField(max_length=200, null=True)
     thumbnail = models.ImageField(upload_to='./static/course', null=True)
 
     def __str__(self):
         template = '{0.name} | {0.category}'
         return template.format(self)
+    
+    @property
+    def link(self):
+        return f"/{self.url_slug}/"
+    
+class CustomUserQuizzes(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+
+class CustomUserCourses(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
 
 # class Purchase(models.Model):
 #     course = models.ForeignKey(Course, null=True, on_delete=models.SET_NULL)

@@ -1,4 +1,4 @@
-from rest_framework import permissions, status
+from rest_framework import permissions, status, viewsets
 from .validations import custom_validation, validate_email, validate_password
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
@@ -7,8 +7,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.viewsets import ViewSet
-from ..models import TutorialPhotoshop, TutorialIllustrator, Course
-from .serializers import TutorialPhotoshopSerializer, TutorialIllustratorSerializer, CourseSerializer, UserRegisterSerializer, UserLoginSerializer, UserViewSerializer 
+from ..models import TutorialPhotoshop, TutorialIllustrator, Course, Quiz
+from .serializers import TutorialPhotoshopSerializer, TutorialIllustratorSerializer, CourseSerializer, UserRegisterSerializer, UserLoginSerializer, UserViewSerializer, QuizSerializer 
 
 class TutorialPhotoshopViewSet(ModelViewSet):
     permission_classes = (permissions.AllowAny,)
@@ -19,10 +19,6 @@ class TutorialIllustratorViewSet(ModelViewSet):
     permission_classes = (permissions.AllowAny,)
     queryset = TutorialIllustrator.objects.all()
     serializer_class = TutorialIllustratorSerializer
-
-class CourseViewSet(ModelViewSet):
-    queryset = Course.objects.all()
-    serializer_class = CourseSerializer
 
 UserModel = get_user_model()
 class UserRegisterViewSet(ViewSet):
@@ -67,3 +63,14 @@ class UserViewViewSet(ViewSet):
         serializer = UserViewSerializer(request.user)
         return Response({'user': serializer.data}, status=status.HTTP_200_OK)
     
+class QuizViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+
+    queryset = Quiz.objects.all()
+    serializer_class = QuizSerializer
+
+class CourseViewSet(viewsets.ModelViewSet):
+    permission_classes = (permissions.AllowAny,)
+    
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
