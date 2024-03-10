@@ -1,55 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
-class UserManager(BaseUserManager):
-    def create_user(self, email, password):
-        if not email:
-            raise ValueError("Insert email")
-        if not password:
-            raise ValueError('A password is required.')
-        email = self.normalize_email(email)
-        user =  self.model(email=email)
-        user.set_password(password)
-        user.save()
-        return user
-    
-    def create_superuser(self, email, password):
-        if not email:
-            raise ValueError('An email is required.')
-        if not password:
-            raise ValueError('A password is required.')
-        user = self.create_user(email, password)
-        user.is_superuser = True
-        user.save()
-        return user
-
-class CustomUser(AbstractBaseUser):
-    firstName = models.CharField(max_length=255, null=True)
-    lastName = models.CharField(max_length=255, null=True)
-    username = models.CharField(max_length=255, null=True)
-    email = models.EmailField(max_length=254, unique=True)
-    password = models.CharField(max_length=128, null=True)
-    dateCreated = models.DateTimeField(auto_now_add=True)
-    dateUpdated = models.DateTimeField(auto_now=True)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
-
-    objects = UserManager()
-
-    def __str__(self):
-        template = '{0.firstName} | {0.lastName} | {0.username}'
-        return template.format(self)
-    
-    def has_module_perms(self, add_label):
-        return True
-    
-    def has_perm(self, perm, obj=None):
-        return True
-    
 class Quiz(models.Model):
     CATEGORY = (
         ('Photoshop', 'Photoshop'),
@@ -93,14 +44,58 @@ class Course(models.Model):
     @property
     def link(self):
         return f"/{self.url_slug}/"
-    
-class CustomUserQuizzes(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
 
-class CustomUserCourses(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+class UserManager(BaseUserManager):
+    def create_user(self, email, password):
+        if not email:
+            raise ValueError("Insert email")
+        if not password:
+            raise ValueError('A password is required.')
+        email = self.normalize_email(email)
+        user =  self.model(email=email)
+        user.set_password(password)
+        user.save()
+        return user
+    
+    def create_superuser(self, email, password):
+        if not email:
+            raise ValueError('An email is required.')
+        if not password:
+            raise ValueError('A password is required.')
+        user = self.create_user(email, password)
+        user.is_superuser = True
+        user.save()
+        return user
+
+class CustomUser(AbstractBaseUser):
+    firstName = models.CharField(max_length=255, null=True)
+    lastName = models.CharField(max_length=255, null=True)
+    username = models.CharField(max_length=255, null=True)
+    email = models.EmailField(max_length=254, unique=True)
+    password = models.CharField(max_length=128, null=True)
+    dateCreated = models.DateTimeField(auto_now_add=True)
+    dateUpdated = models.DateTimeField(auto_now=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    courses = models.ManyToManyField(Course)
+    quizzes = models.ManyToManyField(Quiz)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+    objects = UserManager()
+
+    def __str__(self):
+        template = '{0.firstName} | {0.lastName} | {0.username}'
+        return template.format(self)
+    
+    def has_module_perms(self, add_label):
+        return True
+    
+    def has_perm(self, perm, obj=None):
+        return True
+
 
 # class Purchase(models.Model):
 #     course = models.ForeignKey(Course, null=True, on_delete=models.SET_NULL)

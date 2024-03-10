@@ -38,7 +38,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('email', 'username', 'firstName', 'lastName')
+        fields = ('id', 'email', 'username', 'firstName', 'lastName', 'courses', 'quizzes')
 
 class QuizSerializer(serializers.ModelSerializer):
     class Meta:
