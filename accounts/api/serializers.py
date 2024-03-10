@@ -1,6 +1,6 @@
 from django.forms import ValidationError
 from rest_framework import serializers
-from ..models import TutorialPhotoshop, TutorialIllustrator, Course
+from ..models import TutorialPhotoshop, TutorialIllustrator, Course, Quiz
 from django.contrib.auth import get_user_model, authenticate
 
 UserModel = get_user_model()
@@ -38,7 +38,17 @@ class UserLoginSerializer(serializers.ModelSerializer):
 class UserViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('email', 'username', 'firstName', 'lastName')
+        fields = ('id', 'email', 'username', 'firstName', 'lastName', 'courses', 'quizzes')
+
+class QuizSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quiz
+        fields = ('id', 'name', 'artist', 'category', 'length', 'url', 'thumbnail', 'dateCreated')
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'name', 'price', 'category', 'length', 'dateCreated', 'url', 'thumbnail')
         
 class TutorialPhotoshopSerializer(serializers.ModelSerializer):
     class Meta:
@@ -52,8 +62,3 @@ class TutorialIllustratorSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'content1', 'content2', 'content3', 'content4',
                   'content5', 'image1', 'image2', 'image3', 'image4', 'image5')
         
-class CourseSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Course
-        fields = ('id', 'name', 'price', 'content', 'description', 'length',
-                  'dateCreated', 'link', 'thumbnail')
