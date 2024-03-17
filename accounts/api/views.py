@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from rest_framework import permissions, status, viewsets
 from .validations import custom_validation, validate_email, validate_password
 from rest_framework.response import Response
@@ -7,8 +8,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.viewsets import ViewSet
+from rest_framework.views import APIView
 from ..models import TutorialPhotoshop, TutorialIllustrator, Course, Quiz
 from .serializers import TutorialPhotoshopSerializer, TutorialIllustratorSerializer, CourseSerializer, UserRegisterSerializer, UserLoginSerializer, UserViewSerializer, QuizSerializer 
+import stripe
+from django.conf import settings
 
 class TutorialPhotoshopViewSet(ModelViewSet):
     permission_classes = (permissions.AllowAny,)
@@ -187,3 +191,31 @@ class UserQuizListViewSet(ViewSet):
             return Response({'quizzes': serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class StripeCheckoutViewSet(ViewSet):
+    permission_classes = (permissions.AllowAny)
+    
+    def post(self, request):
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                line_items=[
+                    {
+                        'price': 'price_1OvRGg05bi6fhtTnUldGNykt',
+                        'quantity': 1,
+                    },
+                ],
+                payment_method_types=['card'],
+                mode='payment',
+                success_url=settings.SITE_URL + '?success=true&session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=settings.SITE_URL + '?canceled=true',
+            )
+
+            return redirect(checkout_session.url)
+        except Exception as e:
+            return Response(
+                {'error': f'Something went wrong when creating stripe checkout session: {e}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR 
+            )

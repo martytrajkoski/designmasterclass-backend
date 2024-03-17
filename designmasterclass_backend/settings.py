@@ -72,6 +72,10 @@ REST_FRAMEWORK = {
     ),
 }
 
+STRIPE_SECRET_KEY = 'sk_test_51OvQtC05bi6fhtTnv5wCaCgWdw8nQmtPxcppwgRrl0A1Y8pZXt4T3soew2GuMZ4347dZjW3s5Nvw7SqjLKbxDFY100FzCGtlxL'
+
+SITE_URL = 'http://localhost:3000'
+
 ROOT_URLCONF = 'designmasterclass_backend.urls'
 
 TEMPLATES = [
