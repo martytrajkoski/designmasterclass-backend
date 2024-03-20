@@ -21,10 +21,9 @@ router.register(r'add_quiz', UserQuizAddViewSet, basename='user-add-quiz')
 router.register(r'remove_quiz', UserQuizRemoveViewSet, basename='user-remove-quiz')
 router.register(r'list_quiz', UserQuizListViewSet, basename='user-list-quiz')
 
-router.register(r'create_checkout_session', StripeCheckoutViewSet, basename='stripe-checkout')
-
 urlpatterns = [
     path('', include(router.urls)),
+    path('create_checkout_session', StripeCheckoutViewSet.as_view())
 ]
 
 # {

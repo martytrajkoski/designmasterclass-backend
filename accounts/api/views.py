@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from rest_framework import permissions, status, viewsets
 from .validations import custom_validation, validate_email, validate_password
 from rest_framework.response import Response
@@ -195,26 +195,29 @@ class UserQuizListViewSet(ViewSet):
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-class StripeCheckoutViewSet(ViewSet):
-    permission_classes = (permissions.AllowAny)
-    
+class StripeCheckoutViewSet(APIView):
+    permission_classes = (permissions.AllowAny,)
+
     def post(self, request):
+        course_id = request.data.get('course_id')
+        course = get_object_or_404(Course, id=course_id)
         try:
             checkout_session = stripe.checkout.Session.create(
                 line_items=[
                     {
-                        'price': 'price_1OvRGg05bi6fhtTnUldGNykt',
+                        'price': course.stripe_price_id,
                         'quantity': 1,
                     },
                 ],
-                payment_method_types=['card'],
+                payment_method_types=['card',],
                 mode='payment',
                 success_url=settings.SITE_URL + '?success=true&session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=settings.SITE_URL + '?canceled=true',
             )
-
-            return redirect(checkout_session.url)
+            # Return the checkout session URL
+            return Response(checkout_session.url)
         except Exception as e:
+            # Handle exceptions
             return Response(
                 {'error': f'Something went wrong when creating stripe checkout session: {e}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR 

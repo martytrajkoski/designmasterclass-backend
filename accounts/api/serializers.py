@@ -48,7 +48,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('id', 'name', 'price', 'category', 'length', 'dateCreated', 'url', 'thumbnail')
+        fields = ('id', 'name', 'artist', 'price', 'category', 'length', 'dateCreated', 'url', 'thumbnail', 'stripe_price_id')
         
 class TutorialPhotoshopSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,4 +61,3 @@ class TutorialIllustratorSerializer(serializers.ModelSerializer):
         model = TutorialIllustrator
         fields = ('id', 'name', 'content1', 'content2', 'content3', 'content4',
                   'content5', 'image1', 'image2', 'image3', 'image4', 'image5')
-        
