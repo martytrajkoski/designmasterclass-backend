@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views import TutorialPhotoshopViewSet, TutorialIllustratorViewSet, CourseViewSet, QuizViewSet, UserCourseListViewSet, UserLoginViewSet, UserLogoutViewSet, UserQuizAddViewSet, UserQuizListViewSet, UserQuizRemoveViewSet, UserRegisterViewSet, UserViewViewSet, UserCourseAddViewSet, UserCourseRemoveViewSet
+from .views import TutorialPhotoshopViewSet, TutorialIllustratorViewSet, CourseViewSet, QuizViewSet, UserCourseListViewSet, UserLoginViewSet, UserLogoutViewSet, UserQuizAddViewSet, UserQuizListViewSet, UserQuizRemoveViewSet, UserRegisterViewSet, UserViewViewSet, UserCourseAddViewSet, UserCourseRemoveViewSet, StripeCheckoutViewSet
 from django.urls import path, include
 
 router = DefaultRouter()
@@ -23,6 +23,7 @@ router.register(r'list_quiz', UserQuizListViewSet, basename='user-list-quiz')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('create_checkout_session', StripeCheckoutViewSet.as_view())
 ]
 
 # {

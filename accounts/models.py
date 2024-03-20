@@ -36,6 +36,7 @@ class Course(models.Model):
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     url = models.URLField(max_length=200, null=True)
     thumbnail = models.ImageField(upload_to='./static/course', null=True)
+    stripe_price_id = models.CharField(max_length=200, null=True)
 
     def __str__(self):
         template = '{0.name} | {0.category}'
