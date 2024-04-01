@@ -31,7 +31,7 @@ class Course(models.Model):
     artist = models.CharField(max_length=50, null=True)
     price = models.FloatField(null=True)
     category = models.CharField(max_length=200, null=True, choices=CATEGORY)
-    # description = models.CharField(max_length=500, null=True)
+    rating = models.DecimalField(max_digits=5, decimal_places=1, default=0)
     length = models.DurationField(null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     url = models.URLField(max_length=200, null=True)
@@ -47,32 +47,31 @@ class Course(models.Model):
         return f"/{self.url_slug}/"
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password):
+    def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError("Insert email")
-        if not password:
-            raise ValueError('A password is required.')
+            raise ValueError("The Email field must be set")
         email = self.normalize_email(email)
-        user =  self.model(email=email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
-        user.save()
+        user.save(using=self._db)
         return user
-    
-    def create_superuser(self, email, password):
-        if not email:
-            raise ValueError('An email is required.')
-        if not password:
-            raise ValueError('A password is required.')
-        user = self.create_user(email, password)
-        user.is_superuser = True
-        user.save()
-        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser):
     firstName = models.CharField(max_length=255, null=True)
     lastName = models.CharField(max_length=255, null=True)
     username = models.CharField(max_length=255, null=True)
-    email = models.EmailField(max_length=254, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     password = models.CharField(max_length=128, null=True)
     dateCreated = models.DateTimeField(auto_now_add=True)
     dateUpdated = models.DateTimeField(auto_now=True)
@@ -97,16 +96,6 @@ class CustomUser(AbstractBaseUser):
     def has_perm(self, perm, obj=None):
         return True
 
-
-# class Purchase(models.Model):
-#     course = models.ForeignKey(Course, null=True, on_delete=models.SET_NULL)
-#     customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
-#     datePurchase = models.DateTimeField(auto_now_add=True, null=True)
-
-#     def __str__(self):
-#         template = '{0.course} | {0.customer}'
-#         return template.format(self)
-    
 class TutorialPhotoshop(models.Model):
     name = models.CharField(max_length=500, null=True)
     content1 = models.TextField(blank=True)

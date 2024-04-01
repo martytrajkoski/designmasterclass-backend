@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model, authenticate
 UserModel = get_user_model()
 
 class UserRegisterSerializer(serializers.ModelSerializer):
+    courses = serializers.PrimaryKeyRelatedField(allow_empty=False, many=True, queryset=Course.objects.all(), required=False)
+    quizzes = serializers.PrimaryKeyRelatedField(allow_empty=False, many=True, queryset=Quiz.objects.all(), required=False)
     class Meta:
         model = UserModel
         fields='__all__'
@@ -48,7 +50,7 @@ class QuizSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('id', 'name', 'artist', 'price', 'category', 'length', 'dateCreated', 'url', 'thumbnail', 'stripe_price_id')
+        fields = ('id', 'name', 'artist', 'price', 'rating', 'category', 'length', 'dateCreated', 'url', 'thumbnail', 'stripe_price_id')
         
 class TutorialPhotoshopSerializer(serializers.ModelSerializer):
     class Meta:
