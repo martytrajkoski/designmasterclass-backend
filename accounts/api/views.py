@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, viewsets
 from .validations import custom_validation, validate_email, validate_password
 from rest_framework.response import Response
@@ -214,10 +214,8 @@ class StripeCheckoutViewSet(APIView):
                 success_url=settings.SITE_URL + '?success=true&session_id={CHECKOUT_SESSION_ID}',
                 cancel_url=settings.SITE_URL + '?canceled=true',
             )
-            # Return the checkout session URL
             return Response(checkout_session.url)
         except Exception as e:
-            # Handle exceptions
             return Response(
                 {'error': f'Something went wrong when creating stripe checkout session: {e}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR 
